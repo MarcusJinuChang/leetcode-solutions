@@ -8,44 +8,42 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-#include <vector>
 class Solution {
 public:
-    ListNode* partition(ListNode* head, int x) {
-        if (head == nullptr || head->next == nullptr)
-            return head;
+    ListNode* partition(ListNode* head, int x) 
+    {
+        ListNode dummy(-1);
+        ListNode* nextHead = &dummy;
+        ListNode* trav = nextHead;
 
-        std::vector<ListNode*> low;
-        std::vector<ListNode*> high;
-
-        ListNode* n = head;
-
-        while (n != nullptr) {
-            if (n->val < x)
-                low.push_back(n);
+        ListNode* curr = head;
+        
+        ListNode orgDummy(-1);
+        orgDummy.next = head;
+        ListNode* prev = &orgDummy;
+        while(curr)
+        {
+            
+            if(curr->val >= x)
+            {
+              //  cout<<"curr->val:"<<curr->val<<endl;
+             //   cout<<"prev->val:"<<prev->val<<endl;
+                prev->next = curr->next;
+                trav->next = curr;
+                curr->next = nullptr;
+                trav = trav->next;
+                curr = prev->next;
+            }
             else
-                high.push_back(n);
-
-            n = n->next;
-        }
-
-        if (!high.empty()) {
-            for (size_t i = 0; i < high.size() - 1; i++) {
-                high[i]->next = high[i + 1];
+            {
+                 prev = curr;
+                curr = curr->next;
+               
             }
-            high[high.size() - 1]->next = nullptr;
+            
         }
-
-        if (!low.empty()) {
-            for (size_t i = 0; i < low.size() - 1; i++) {
-                low[i]->next = low[i + 1];
-            }
-            low[low.size() - 1]->next = !high.empty() ? high[0] : nullptr;
-        } else {
-            return high[0];
-        }
-
-        head = low[0];
-        return head;
+        prev->next = nextHead->next;
+        return  orgDummy.next;
+        
     }
 };
