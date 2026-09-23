@@ -5,11 +5,9 @@ public:
         pushAll(root);
     }
 
-
     bool hasNext() {
         return !myStack.empty();
     }
-
 
     int next() {
         TreeNode *tmpNode = myStack.top();
